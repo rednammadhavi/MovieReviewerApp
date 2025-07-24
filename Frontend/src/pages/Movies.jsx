@@ -35,44 +35,55 @@ function Movies() {
       message.error(error.message);
     }
   };
+
   useEffect(() => {
     getAllMovies();
   }, []);
+
   const columns = [
     {
-      title: "Movie",
+      title: <span className="text-white">Poster</span>,
       dataIndex: "name",
       render: (text, record) => {
         const imageUrl = record?.posters?.[0] || "";
-        return <img className="w-20 h-20 rounded" src={imageUrl} alt="" />;
+        return <img className="w-20 h-20 object-cover rounded shadow-md" src={imageUrl} alt={record.name} />;
       },
     },
-    { title: "Name", dataIndex: "name" },
     {
-      title: "Relaese Date",
+      title: <span className="text-white">Name</span>,
+      dataIndex: "name",
+      render: (text) => <span className="text-white">{text}</span>,
+    },
+    {
+      title: <span className="text-white">Release Date</span>,
       dataIndex: "releaseDate",
-      render: (text) => {
-        return getDateFormat(text);
-      },
+      render: (text) => <span className="text-white">{getDateFormat(text)}</span>,
     },
-    { title: "Genre", dataIndex: "genre" },
-    { title: "Language", dataIndex: "language" },
     {
-      title: "Action",
+      title: <span className="text-white">Genre</span>,
+      dataIndex: "genre",
+      render: (text) => <span className="text-white">{text}</span>,
+    },
+    {
+      title: <span className="text-white">Language</span>,
+      dataIndex: "language",
+      render: (text) => <span className="capitalize text-white">{text}</span>,
+    },
+    {
+      title: <span className="text-white">Action</span>,
       dataIndex: "action",
       render: (text, record) => {
         return (
-          <div className="flex gap-5">
+          <div className="flex gap-4">
+            {/* Edit Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6"
-              onClick={() => {
-                navigate(`/admin/movies/edit/${record._id}`);
-              }}
+              className="w-6 h-6 text-orange-400 hover:text-orange-500 cursor-pointer transition"
+              onClick={() => navigate(`/admin/movies/edit/${record._id}`)}
             >
               <path
                 strokeLinecap="round"
@@ -80,16 +91,16 @@ function Movies() {
                 d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
               />
             </svg>
+
+            {/* Delete Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6"
-              onClick={() => {
-                deleteMovie(record._id);
-              }}
+              className="w-6 h-6 text-red-400 hover:text-red-500 cursor-pointer transition"
+              onClick={() => deleteMovie(record._id)}
             >
               <path
                 strokeLinecap="round"
@@ -102,12 +113,28 @@ function Movies() {
       },
     },
   ];
+
   return (
-    <div>
-      <div className="flex justify-end mr-5">
-        <Button onClick={() => navigate("/admin/movies/add")}>Add Movie</Button>
+    <div className="min-h-screen px-6 py-10 bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold text-orange-400">🎬 Manage Movies</h2>
+        <Button
+          onClick={() => navigate("/admin/movies/add")}
+          className="bg-orange-500 hover:bg-orange-600 border-none text-white font-semibold rounded-md px-6 py-2"
+        >
+          Add Movie
+        </Button>
       </div>
-      <Table dataSource={movies} columns={columns} className="m-5"></Table>
+
+      <div className="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-4 shadow-xl">
+        <Table
+          dataSource={movies}
+          columns={columns}
+          rowKey="_id"
+          pagination={{ pageSize: 6 }}
+          className="custom-table"
+        />
+      </div>
     </div>
   );
 }
