@@ -8,24 +8,22 @@ import { setUser } from '../redux/usersSlice';
 import { setLoading } from '../redux/loadersSlice';
 
 function ProtectedPage({ children }) {
-  // const [user, setUser] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.users);
 
-  //here setting the data to redux store
   const getCurrentUser = async () => {
     try {
       dispatch(setLoading(true));
       const response = await GetCurrentUser();
       dispatch(setLoading(false));
-      // setUser(response.data);
       dispatch(setUser(response.data));
     } catch (error) {
       dispatch(setLoading(false));
       message.error(error.message);
     }
   };
+
   useEffect(() => {
     if (!localStorage.getItem('token')) {
       navigate('/login');
@@ -33,14 +31,13 @@ function ProtectedPage({ children }) {
       getCurrentUser();
     }
   }, []);
+
   return (
     <div>
       <div className='flex justify-between items-center bg-primary p-5'>
         <span
-          className='font semibold text-orange-500 text-2xl cursor-pointer'
-          onClick={() => {
-            navigate('/');
-          }}
+          className='font-semibold text-orange-500 text-2xl cursor-pointer'
+          onClick={() => navigate('/')}
         >
           Movie World
         </span>
@@ -61,20 +58,17 @@ function ProtectedPage({ children }) {
           </svg>
           <span
             className='text-primary text-sm cursor-pointer underline'
-            onClick={() => {
-              navigate('/profile');
-            }}
+            onClick={() => navigate('/profile')}
           >
             {user?.name}
           </span>
-
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
             viewBox='0 0 24 24'
             strokeWidth={1.5}
             stroke='currentColor'
-            className='w.-6 h-6'
+            className='w-6 h-6'
             onClick={() => {
               localStorage.removeItem('token');
               navigate('/login');
@@ -83,7 +77,7 @@ function ProtectedPage({ children }) {
             <path
               strokeLinecap='round'
               strokeLinejoin='round'
-              d='M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9'
+              d='M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9'
             />
           </svg>
         </div>
@@ -92,4 +86,5 @@ function ProtectedPage({ children }) {
     </div>
   );
 }
+
 export default ProtectedPage;

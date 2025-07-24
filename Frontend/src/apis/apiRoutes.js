@@ -15,7 +15,7 @@ export const MovieRoutes = {
 };
 
 export const ArtistRoutes = {
-    ADD: `${host}/artists/add1`,
+    ADD: `${host}/artists/add-artist`,
     GET_ALL: `${host}/artists`,
     GET_BY_ID: (id) => `${host}/artists/${id}`,
     UPDATE: (id) => `${host}/artists/${id}`,

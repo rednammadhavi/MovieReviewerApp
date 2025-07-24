@@ -19,19 +19,19 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
-        if (!user) throw new Error("User not exist");
+        if (!user) throw new Error("User does not exist");
 
         const isCorrectPassword = await bcrypt.compare(req.body.password, user.password);
         if (!isCorrectPassword) throw new Error("Invalid password");
 
-        const token = jwt.sign({ userId: user._id }, process.env.secret_jwt, {
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
             expiresIn: "1d",
         });
 
         res.status(200).json({
             message: "User logged in successfully",
             success: true,
-            token: token,
+            token,
         });
     } catch (error) {
         res.status(500).json({ message: error.message, success: false });
@@ -50,6 +50,7 @@ const getCurrentUser = async (req, res) => {
         res.status(500).json({ message: error.message, success: false });
     }
 };
+
 export {
     registerUser,
     loginUser,

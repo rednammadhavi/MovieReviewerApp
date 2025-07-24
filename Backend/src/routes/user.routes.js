@@ -8,8 +8,8 @@ import {
 
 const router = express.Router();
 
-router.route("/register").post(verifyJWT, registerUser);
-router.route("/login").post(verifyJWT, loginUser);
+router.route("/register").post(registerUser);
+router.route("/login").post(loginUser);
 router.route("/get-current-user").get(verifyJWT, getCurrentUser);
 
 export { router };
